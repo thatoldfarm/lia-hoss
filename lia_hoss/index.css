@@ -46,6 +46,103 @@ body {
   min-height: 100vh;
 }
 
+/* Static Modal Styles */
+#static-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(1, 4, 19, 0.85); /* Darker, more thematic overlay from manual */
+  backdrop-filter: blur(8px); /* Match manual overlay blur */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1900; /* Slightly below .manual-overlay (2000) if they could overlap */
+}
+
+/* Class to control visibility */
+.static-modal-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s !important;
+}
+
+.static-modal-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s linear 0s !important;
+}
+
+#static-modal-content {
+  background-color: var(--background-color);
+  padding: 20px; /* Standard padding */
+  border-radius: 8px; /* Standard border radius */
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.3); /* Match .manual-content shadow */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--primary-glow); /* Match .manual-content border */
+  /* Dimensions will be set by specific classes */
+}
+
+/* Specific dimensions for FreeDOS modal (matches GenericEmulatorWindow in index.tsx) */
+#static-modal-content.freedos-modal-dimensions {
+  width: 80vw;
+  height: 80vh;
+  max-width: 1000px;
+  max-height: 700px;
+}
+
+/* Specific dimensions for Sectorforth modal (matches SectorforthEmulatorWindow in index.tsx) */
+#static-modal-content.sectorforth-modal-dimensions {
+  width: 90vw;
+  height: 90vh;
+  max-width: 1400px;
+  max-height: 800px;
+}
+
+#static-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px; /* Increased spacing */
+  padding-bottom: 10px; /* Add padding for visual separation */
+  border-bottom: 1px solid var(--border-color); /* Separator line */
+}
+
+#static-modal-title {
+  margin: 0;
+  font-size: 1.3em; /* Adjusted size */
+  font-family: var(--font-primary);
+  color: var(--primary-glow);
+  text-shadow: 0 0 5px var(--primary-glow); /* Add text shadow */
+}
+
+#static-modal-close-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 6px 10px; /* Adjusted padding */
+  font-size: 1.1em; /* Adjusted size */
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+#static-modal-close-btn:hover {
+  color: var(--primary-glow);
+  border-color: var(--primary-glow);
+  background-color: rgba(0, 255, 255, 0.1);
+}
+
+#static-modal-iframe {
+  flex-grow: 1;
+  border: none; /* Cleaner look, modal provides border */
+  border-radius: 4px; /* Consistent with other elements if border was visible */
+  background-color: #000;
+}
+
 #root, .app-wrapper {
   width: 100%;
   height: 100vh;
