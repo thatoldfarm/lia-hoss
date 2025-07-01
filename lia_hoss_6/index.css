@@ -98,7 +98,24 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  flex-grow: 1; /* Allow ul to take available space in the flex column of .panel */
+  overflow-y: auto; /* Enable vertical scrollbar if content overflows */
+  min-height: 0; /* Important for flex children that need to scroll */
+  padding-right: 0.5rem; /* Add a little padding so scrollbar doesn't overlap content too much */
 }
+
+/* Custom scrollbar for state-vectors list specifically if needed, or rely on global */
+.state-vectors ul::-webkit-scrollbar {
+  width: 4px;
+}
+.state-vectors ul::-webkit-scrollbar-track {
+  background: transparent; /* Or a very subtle color from panel-bg */
+}
+.state-vectors ul::-webkit-scrollbar-thumb {
+  background: var(--primary-glow); /* Or var(--secondary-glow) */
+  border-radius: 2px;
+}
+
 
 .vector-item {
   opacity: 0;
@@ -980,9 +997,9 @@ body {
   background: var(--panel-bg);
   border: 1px solid var(--border-color);
   backdrop-filter: blur(10px);
-  border-radius: 6px; /* Slightly smaller radius */
-  padding: 0.4rem 1rem; /* Reduced padding */
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.1), inset 0 0 8px rgba(0, 255, 255, 0.05); /* Adjusted shadow */
+  border-radius: 6px;
+  padding: 0.3rem 1rem; /* Further reduced vertical padding for ~10% height decrease */
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.1), inset 0 0 8px rgba(0, 255, 255, 0.05);
   display: flex;
   align-items: center;
   gap: 1.5rem;
