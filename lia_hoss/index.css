@@ -1117,39 +1117,54 @@ body {
   min-width: 20px; /* Adjusted min-width */
 }
 
-/* Styles for Emulator Launch Buttons on index.html */
-.emulator-launch-section {
+/* Styles for Static Icon Controls on index.html */
+.static-icon-controls {
   display: flex;
-  flex-direction: column; /* Stack buttons vertically */
-  align-items: center;    /* Center buttons horizontally */
-  gap: 1rem;                /* Space between buttons */
-  margin-bottom: 2rem;      /* Space below the buttons, before the #root app */
-  padding: 1rem;
-  position: relative; /* To ensure it's above the main app if it's absolutely positioned */
-  z-index: 10; /* Above default content, below modals/HUD if any */
+  justify-content: center; /* Center buttons horizontally */
+  align-items: center;
+  gap: 1rem;                /* Space between icon buttons */
+  margin-bottom: 1.5rem;    /* Space below the buttons, before the #root app */
+  padding: 0.5rem;
+  position: relative;
+  z-index: 10;
 }
 
-.emulator-launch-btn {
-  font-family: var(--font-primary);
-  font-size: 1rem;
-  color: var(--primary-glow);
+.static-icon-btn {
+  display: inline-flex; /* Use flex to center SVG inside the link */
+  justify-content: center;
+  align-items: center;
+  width: 36px;  /* Match .help-btn size */
+  height: 36px; /* Match .help-btn size */
+  border-radius: 50%; /* Circular shape like .help-btn */
   background: transparent;
-  border: 2px solid var(--primary-glow);
-  padding: 0.75rem 1.5rem; /* Slightly more padding for main page buttons */
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted); /* Icon color will inherit this */
   cursor: pointer;
   transition: all 0.3s ease;
-  text-shadow: 0 0 5px var(--primary-glow);
-  box-shadow: 0 0 5px var(--primary-glow), inset 0 0 5px rgba(0, 255, 255, 0.3); /* Adjusted inset shadow */
-  text-decoration: none; /* Remove underline from <a> tags */
-  display: inline-block; /* Behaves like a button */
-  text-align: center;
+  padding: 0; /* Remove padding if size is fixed */
+  text-decoration: none; /* Ensure link doesn't have underline */
 }
 
-.emulator-launch-btn:hover,
-.emulator-launch-btn:focus {
-  color: var(--background-color);
-  background: var(--primary-glow);
-  box-shadow: 0 0 15px var(--primary-glow), 0 0 10px var(--primary-glow);
-  text-shadow: 0 0 3px var(--background-color); /* Ensure text is readable on hover */
+.static-icon-btn svg {
+  stroke: currentColor; /* Make SVG use the link's color */
+  width: 18px;  /* Match SVG size in .help-btn */
+  height: 18px; /* Match SVG size in .help-btn */
+  fill: none; /* Ensure SVG isn't filled if only stroke is desired */
+}
+
+.static-icon-btn:hover,
+.static-icon-btn:focus {
+  background: rgba(0, 255, 255, 0.1);
+  color: var(--primary-glow);
+  border-color: var(--primary-glow);
+  outline: none; /* Remove default focus outline if custom is applied by border/bg */
+}
+
+/* Remove/deprecate old text button styles if they are confirmed to be no longer used elsewhere */
+/* For now, just ensuring they don't conflict if .emulator-launch-section was somehow still in HTML */
+.emulator-launch-section {
+  /* display: none; */ /* Commenting out for safety, can be deleted if sure it's gone from HTML */
+}
+.emulator-launch-btn {
+  /* display: none; */ /* Commenting out for safety, can be deleted if sure it's gone from HTML */
 }
