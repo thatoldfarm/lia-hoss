@@ -3,6 +3,7 @@ import { render } from "preact";
 import { useState, useEffect, useRef, useMemo } from "preact/hooks";
 import { html } from "htm/preact";
 import { GoogleGenAI } from "@google/genai";
+import { Hud } from "./Hud";
 
 const API_KEY = process.env.API_KEY;
 
@@ -483,6 +484,7 @@ Do not wrap the JSON in markdown or any other text.`;
 
   return html`
     <div class="app-wrapper">
+      <${Hud} state=${state} />
       <div class="app-container">
         <div class="panel state-vectors">
           <div class="panel-header">
