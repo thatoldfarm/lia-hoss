@@ -281,7 +281,7 @@ ReInitiate_Sequence(Protocol='Omega Sequence Corpus - Comprehensive Key v2.0').<
 }
 
 // EmulatorWindow component definition
-function EmulatorWindow({ isVisible, onClose }) {
+function EmulatorWindow({ isVisible, onClose, title, iframeSrc }) {
   if (!isVisible) return null;
 
   const overlayStyle = {
@@ -344,14 +344,14 @@ function EmulatorWindow({ isVisible, onClose }) {
     <div style=${overlayStyle} onClick=${onClose}>
       <div style=${windowStyle} onClick=${e => e.stopPropagation()}>
         <div style=${headerStyle}>
-          <h3 style=${titleStyle}>Sectorforth Emulator</h3>
+          <h3 style=${titleStyle}>${title}</h3>
           <button style=${closeButtonStyle} onClick=${onClose} aria-label="Close Emulator">
             × Close
           </button>
         </div>
         <iframe
-          src="/LIA_FC_Sectorforth/start.html"
-          title="Sectorforth Emulator"
+          src=${iframeSrc}
+          title=${title}
           style=${iframeStyle}
         ></iframe>
       </div>
@@ -374,7 +374,8 @@ function App() {
   const [activeOperator, setActiveOperator] = useState('Send');
   const [showManual, setShowManual] = useState(false);
   const [showHud, setShowHud] = useState(true); // Added state for HUD visibility
-  const [showEmulatorWindow, setShowEmulatorWindow] = useState(false); // State for emulator window
+  const [showSectorforthEmulator, setShowSectorforthEmulator] = useState(false); // Renamed state
+  const [showFreedosTinyEmulator, setShowFreedosTinyEmulator] = useState(false); // New state for Freedos Tiny
   const logRef = useRef(null);
   const chatRef = useRef(null);
 
@@ -642,8 +643,12 @@ Do not wrap the JSON in markdown or any other text.`;
                 <button class="help-btn" onClick=${() => setShowManual(true)} aria-label="Open System Manual" title="Open System Manual">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
                 </button>
-                <button class="help-btn" onClick=${() => setShowEmulatorWindow(true)} aria-label="Launch Emulator" title="Launch Sectorforth Emulator">
+                <button class="help-btn" onClick=${() => setShowSectorforthEmulator(true)} aria-label="Launch Sectorforth Emulator" title="Launch Sectorforth Emulator">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                </button>
+                <button class="help-btn" onClick=${() => setShowFreedosTinyEmulator(true)} aria-label="Launch Freedos-Tiny Emulator" title="Launch Freedos-Tiny Emulator">
+                  {/* A slightly different icon for the second emulator, perhaps a floppy disk or different terminal screen */}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
                 </button>
                 <button class="help-btn hud-toggle-btn" onClick=${() => setShowHud(prev => !prev)} aria-label="Toggle HUD" title="Toggle HUD">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -724,7 +729,18 @@ Do not wrap the JSON in markdown or any other text.`;
         </div>
       </div>
       ${showManual && html`<${SystemManual} onClose=${() => setShowManual(false)} />`}
-      <${EmulatorWindow} isVisible=${showEmulatorWindow} onClose=${() => setShowEmulatorWindow(false)} />
+      <${EmulatorWindow}
+        isVisible=${showSectorforthEmulator}
+        onClose=${() => setShowSectorforthEmulator(false)}
+        title="Sectorforth Emulator"
+        iframeSrc="/LIA_FC_Sectorforth/start.html"
+      />
+      <${EmulatorWindow}
+        isVisible=${showFreedosTinyEmulator}
+        onClose=${() => setShowFreedosTinyEmulator(false)}
+        title="LIA_FC-Freedos-Tiny Emulator"
+        iframeSrc="/LIA_FC-Freedos-Tiny/start.html"
+      />
     </div>
   `;
 }

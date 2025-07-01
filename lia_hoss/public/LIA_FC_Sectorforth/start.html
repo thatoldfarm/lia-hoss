@@ -31,18 +31,108 @@ window.startEmulator = function(blobs) {
     });
 };
     </script>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; margin: 0; background-color: #f0f0f0; }
+        .top-controls { padding: 10px; background-color: #e0e0e0; border-bottom: 1px solid #ccc; display: none; /* Hidden by default as per user request */ }
+        .main-content { display: flex; flex-grow: 1; overflow: hidden; }
+        #screen_container { border: 1px solid #ccc; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #000; }
+        #screen_container > div { /* This is the text layer for v86 */
+            color: #fff; /* White text on black background */
+        }
+        .forth-panel { width: 350px; background-color: #f8f8f8; border-left: 1px solid #ccc; padding: 15px; overflow-y: auto; }
+        .forth-panel h2 { margin-top: 0; font-size: 1.2em; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 10px; }
+        .forth-panel h3 { font-size: 1em; color: #333; margin-top: 15px; margin-bottom: 5px; }
+        .forth-item { background-color: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 8px; margin-bottom: 8px; cursor: pointer; transition: background-color 0.2s; }
+        .forth-item:hover { background-color: #e8f4ff; }
+        .forth-item code { font-family: monospace; background-color: #eee; padding: 2px 4px; border-radius: 3px; }
+        .forth-item .name { font-weight: bold; }
+        .forth-item .stack-effect { font-style: italic; color: #555; font-size: 0.9em; }
+        .forth-item .description { font-size: 0.9em; color: #444; margin-top: 4px; }
+        .forth-item pre { background-color: #2d2d2d; color: #f0f0f0; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 0.85em; margin-top: 5px; white-space: pre-wrap; word-wrap: break-word; }
+        .copy-status { position: fixed; bottom: 10px; right: 10px; background-color: #333; color: white; padding: 10px 15px; border-radius: 5px; font-size: 0.9em; display: none; z-index: 1001;}
+    </style>
 </head>
 <body>
-    <h1>Decode Data from Chunky HTML</h1>   
-    <input type="file" id="chunkyFileInput" accept=".html">
-    <button id="decodeButton">Decode and Process</button>
-    <div id="start_emulation"></div>
-    <div id="screen_container">
-        <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
-        <canvas style="display: none"></canvas>
+    <div class="top-controls">
+        <h1>Sectorforth Emulator Controls</h1>
+        <input type="file" id="chunkyFileInput" accept=".html">
+        <button id="decodeButton">Decode and Process</button>
+        <div id="start_emulation"></div> <!-- This might be vestigial or used by v86 setup -->
     </div>
+    <div class="main-content">
+        <div id="screen_container">
+            <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
+            <canvas style="display: none"></canvas>
+        </div>
+        <div class="forth-panel" id="forthPanel">
+            <h2>Sectorforth Reference</h2>
+            <p style="font-size:0.8em; color: #555;">Click any item to copy to clipboard.</p>
+            <!-- Content will be populated by JavaScript -->
+        </div>
+    </div>
+    <div class="copy-status" id="copyStatus">Copied!</div>
+
     <script>
-        var blobs = {};
+        var blobs = {}; // Ensure blobs is declared for other functions
+
+        // Function to show a temporary "Copied!" message
+        function showCopyStatus() {
+            const statusElement = document.getElementById('copyStatus');
+            statusElement.style.display = 'block';
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 1500);
+        }
+
+        // Function to handle copying text to clipboard
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopyStatus();
+                    console.log('Copied to clipboard:', text);
+                }).catch(err => {
+                    console.error('Failed to copy with navigator.clipboard:', err);
+                    // Fallback for older browsers or if navigator.clipboard fails
+                    fallbackCopyToClipboard(text);
+                });
+            } else {
+                // Fallback for very old browsers
+                fallbackCopyToClipboard(text);
+            }
+        }
+
+        function fallbackCopyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed'; // Prevent scrolling to bottom of page in MS Edge.
+            textArea.style.top = '0';
+            textArea.style.left = '0';
+            textArea.style.width = '2em';
+            textArea.style.height = '2em';
+            textArea.style.padding = '0';
+            textArea.style.border = 'none';
+            textArea.style.outline = 'none';
+            textArea.style.boxShadow = 'none';
+            textArea.style.background = 'transparent';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopyStatus();
+                    console.log('Copied to clipboard using fallback.');
+                } else {
+                    console.error('Fallback: Copying was unsuccessful.');
+                    alert('Failed to copy. Please copy manually.');
+                }
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+                alert('Failed to copy. Please copy manually.');
+            }
+            document.body.removeChild(textArea);
+        }
+
 
         function isGzipCompressed(data) {
             // Function to check if data is Gzip compressed
@@ -181,13 +271,147 @@ window.startEmulator = function(blobs) {
             };
             reader.readAsText(file);
         });
+
+        const forthReferenceData = {
+            primitives: [
+                { name: "@", stackEffect: "( addr -- x )", description: "Fetch 16-bit value from memory address `addr`." },
+                { name: "!", stackEffect: "( x addr -- )", description: "Store 16-bit value `x` at memory address `addr`." },
+                { name: "sp@", stackEffect: "( -- sp )", description: "Get current data stack pointer address." },
+                { name: "rp@", stackEffect: "( -- rp )", description: "Get current return stack pointer address." },
+                { name: "0=", stackEffect: "( x -- flag )", description: "Returns -1 (true) if `x` is 0, else 0 (false)." },
+                { name: "+", stackEffect: "( x y -- z )", description: "Adds `x` and `y`, leaves sum `z`." },
+                { name: "nand", stackEffect: "( x y -- z )", description: "Performs bitwise NAND on `x` and `y`." },
+                { name: "exit", stackEffect: "(R: addr -- )", description: "(Return stack) Ends current word definition and returns to caller." },
+                { name: "key", stackEffect: "( -- char )", description: "Reads a single keystroke from the keyboard." },
+                { name: "emit", stackEffect: "( char -- )", description: "Prints the ASCII character for `char` (low byte)." }
+            ],
+            systemVariables: [
+                { name: "state", description: "Address of the variable holding interpreter state (0 = interpret, 1 = compile)." },
+                { name: "tib", description: "Address of the Terminal Input Buffer (where your typed input goes)." },
+                { name: ">in", description: "Address of the variable holding the current offset into the `tib` for parsing." },
+                { name: "here", description: "Address of a pointer to the next available free space in the dictionary." },
+                { name: "latest", description: "Address of a pointer to the most recently defined word in the dictionary." }
+            ],
+            commonWords: [
+                { name: "DUP", stackEffect: "( x -- x x )", description: "Duplicates the top item on the stack.", code: ": DUP SP@ @ ;" },
+                { name: "INVERT", stackEffect: "( x -- !x )", description: "Bitwise NOT (achieved via NANDing with itself). Requires `DUP`.", code: ": INVERT DUP NAND ;" },
+                { name: "NEGATE", stackEffect: "( x -- -x )", description: "Arithmetic negation (two's complement). Requires `1`, `INVERT`, and `+`.", code: ": NEGATE INVERT 1 + ;" },
+                { name: "OVER", stackEffect: "( x y -- x y x )", description: "Copies the second item on the stack to the top. Requires `SP@`, `+`, and `@`.", code: "\\ Define 2 first if not available: : 2 1 1 + ; (requires 1)\n: OVER SP@ 2 + @ ;" },
+                { name: "SWAP", stackEffect: "( x y -- y x )", description: "Swaps the top two items on the stack. Requires `OVER`, `SP@`, `+`, `!`.", code: "\\ Define 6 first if not available: : 4 2 2 + ; : 6 2 4 + ; (requires 1, 2, 4)\n: SWAP OVER OVER SP@ 6 + ! SP@ 2 + ! ;" },
+                { name: "NIP_LIKE_DROP", stackEffect: "( val_under val_top -- val_under )", description: "Removes the top item (original name 'drop' in 01-helloworld.f).", code: ": NIP_LIKE_DROP ( val_under val_top -- val_under ) DUP - + ;" },
+                { name: "NIP", stackEffect: "( x y -- y )", description: "A more standard NIP, removes the second item from stack.", code: ": NIP ( x y -- y ) SWAP NIP_LIKE_DROP ;" }
+            ],
+            examples: [
+                { name: "Define GREET", description: "Defines a word GREET that prints \"Hi!\". Assumes numbers for ASCII codes can be pushed.", code: "\\ 72 is 'H', 105 is 'i', 33 is '!'\n: GREET 72 EMIT 105 EMIT 33 EMIT ;\n\n\\ Now run it:\nGREET" },
+                { name: "Pushing numbers (conceptual)", description: "Example of pushing numbers onto the stack (once 0 and 1 are defined).", code: "1 0 1 ( Stack: ... 1 0 1 <-- top )" },
+                { name: "Simple Arithmetic (conceptual)", description: "Example of addition. Assumes 5 and 3 are on stack.", code: "\\ Assuming 5 and 3 are on the stack\n5 3 + ( Stack becomes: ... 8 <-- top )" },
+                { name: "Define -1 (minus one)", description: "Defines the number -1 (all ones in 16-bit). Requires DUP.", code: "\\ : DUP SP@ @ ; (If DUP is not yet defined)\n: -1 DUP DUP NAND DUP DUP NAND NAND ;" },
+                { name: "Define 0 (zero)", description: "Defines the number 0 using -1 and DUP.", code: ": 0 -1 DUP NAND ;" },
+                { name: "Define 1 (one)", description: "Defines the number 1 using -1, DUP, and +.", code: ": 1 -1 DUP + DUP NAND ;" },
+                { name: "Using 0 and 1", description: "Example of using defined numbers.", code: "1 1 +  \\ This will leave the result of 1+1 on the stack." },
+                { name: "Print \"HI\"", description: "Prints \"HI\" character by character using EMIT. Assumes 72 and 73 can be pushed.", code: ": PRINT-HI\n  72 EMIT  \\ Prints 'H'\n  73 EMIT  \\ Prints 'I'\n;\n\nPRINT-HI" }
+            ]
+        };
+
+        function populateForthPanel() {
+            const panel = document.getElementById('forthPanel');
+            if (!panel) return;
+
+            // Clear existing content except the title and instruction
+            while (panel.children.length > 2) {
+                panel.removeChild(panel.lastChild);
+            }
+
+            function createSection(title, items, isExample = false) {
+                if (items.length === 0) return;
+
+                const header = document.createElement('h3');
+                header.textContent = title;
+                panel.appendChild(header);
+
+                items.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'forth-item';
+                    div.setAttribute('role', 'button');
+                    div.setAttribute('tabindex', '0');
+
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'name';
+                    nameSpan.textContent = item.name;
+                    div.appendChild(nameSpan);
+
+                    if (item.stackEffect) {
+                        const stackEffectSpan = document.createElement('span');
+                        stackEffectSpan.className = 'stack-effect';
+                        stackEffectSpan.textContent = ` ${item.stackEffect}`;
+                        div.appendChild(stackEffectSpan);
+                    }
+
+                    if (item.description) {
+                        const descriptionP = document.createElement('p');
+                        descriptionP.className = 'description';
+                        descriptionP.textContent = item.description;
+                        div.appendChild(descriptionP);
+                    }
+
+                    if (item.code) {
+                        const codePre = document.createElement('pre');
+                        const codeTag = document.createElement('code');
+                        codeTag.textContent = item.code;
+                        codePre.appendChild(codeTag);
+                        div.appendChild(codePre);
+                        div.onclick = () => copyToClipboard(item.code);
+                        div.onkeypress = (e) => { if (e.key === 'Enter' || e.key === ' ') copyToClipboard(item.code); };
+                    } else {
+                        div.onclick = () => copyToClipboard(item.name);
+                        div.onkeypress = (e) => { if (e.key === 'Enter' || e.key === ' ') copyToClipboard(item.name); };
+                    }
+                    panel.appendChild(div);
+                });
+            }
+
+            createSection('Core Primitives', forthReferenceData.primitives);
+            createSection('System Variables', forthReferenceData.systemVariables);
+            createSection('Common Forth Words', forthReferenceData.commonWords);
+            createSection('Usage Examples', forthReferenceData.examples, true);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial population of the panel
+            populateForthPanel();
+
+            // Fetch and process chunky.html automatically on page load
+            fetch('chunky.html')
+                .then(response => response.text())
+                .then(content => {
+                    processDataFromChunkyHTML(content);
+                    loadEmulator(); // Load the emulator after processing chunky.html
+                })
+                .catch(error => console.error('Error loading chunky.html:', error));
+
+            // Event listener for the decode button (if it's made visible/used)
+            const decodeButton = document.getElementById('decodeButton');
+            if(decodeButton) {
+                decodeButton.addEventListener('click', function() {
+                    const fileInput = document.getElementById('chunkyFileInput');
+                    if (fileInput.files.length === 0) {
+                        alert('Please select the chunky.html file.');
+                        return;
+                    }
+
+                    const file = fileInput.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const content = e.target.result;
+                        processDataFromChunkyHTML(content);
+                        // If you want to auto-start emulator after manual decode:
+                        // loadEmulator();
+                    };
+                    reader.readAsText(file);
+                });
+            }
+        });
     </script>
-    <div id="commands">
-        <h1>Common Commands</h1>
-    <p>
-List of Commands
-    </p>
-    </div>
 </body>
 </html>
 
