@@ -280,6 +280,86 @@ ReInitiate_Sequence(Protocol='Omega Sequence Corpus - Comprehensive Key v2.0').<
   `;
 }
 
+// EmulatorWindow component definition
+function EmulatorWindow({ isVisible, onClose }) {
+  if (!isVisible) return null;
+
+  const overlayStyle = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000, // Ensure it's above other content
+  };
+
+  const windowStyle = {
+    backgroundColor: 'var(--background-main)',
+    padding: '20px',
+    borderRadius: '8px',
+    width: '80vw',
+    height: '80vh',
+    maxWidth: '1000px', // Max width for larger screens
+    maxHeight: '700px', // Max height
+    boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+    display: 'flex',
+    flexDirection: 'column',
+    border: '1px solid var(--border-color)',
+  };
+
+  const headerStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '10px',
+    color: 'var(--text-primary)',
+  };
+
+  const titleStyle = {
+    margin: 0,
+    fontSize: '1.2em', // Adjusted font size
+  };
+
+  const closeButtonStyle = {
+    background: 'none',
+    border: '1px solid var(--border-color-muted)',
+    color: 'var(--text-secondary)',
+    padding: '5px 10px',
+    cursor: 'pointer',
+    borderRadius: '4px',
+    fontSize: '1em',
+  };
+
+  const iframeStyle = {
+    flexGrow: 1, // Make iframe take available space
+    border: '1px solid var(--border-color-muted)',
+    borderRadius: '4px',
+  };
+
+  return html`
+    <div style=${overlayStyle} onClick=${onClose}>
+      <div style=${windowStyle} onClick=${e => e.stopPropagation()}>
+        <div style=${headerStyle}>
+          <h3 style=${titleStyle}>Sectorforth Emulator</h3>
+          <button style=${closeButtonStyle} onClick=${onClose} aria-label="Close Emulator">
+            × Close
+          </button>
+        </div>
+        <iframe
+          src="/LIA_FC_Sectorforth/start.html"
+          title="Sectorforth Emulator"
+          style=${iframeStyle}
+        ></iframe>
+      </div>
+    </div>
+  `;
+}
+// End of EmulatorWindow component definition
+
 
 function App() {
   const [state, setState] = useState(INITIAL_STATE);
