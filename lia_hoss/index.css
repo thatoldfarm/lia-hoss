@@ -1,4 +1,5 @@
 
+
 :root {
   --background-color: #010413;
   --primary-glow: #00ffff;
@@ -759,6 +760,69 @@ body {
     color: #a2d2ff;
 }
 
+/* Emulator Window Styles */
+.emu-window-split {
+  display: flex;
+  flex: 1; /* Take up remaining height */
+  gap: 1.5rem;
+  overflow: hidden;
+}
+
+.emu-iframe-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.emu-readme-container {
+  flex: 0 0 40%; /* Reference panel takes 40% of the space */
+  max-width: 500px;
+  overflow-y: auto;
+  border-left: 1px solid var(--border-color);
+  padding-left: 1.5rem;
+  padding-right: 1rem;
+}
+
+.emu-readme-container h3 {
+  margin-top: 1rem;
+}
+
+.code-block {
+    position: relative;
+    margin: 1rem 0;
+}
+
+.code-block pre {
+  margin: 0;
+}
+
+.copy-btn-emu {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(21, 24, 60, 0.8);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-family: var(--font-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+.copy-btn-emu:hover:not(.copied) {
+    background: var(--primary-glow);
+    color: var(--background-color);
+}
+.copy-btn-emu.copied {
+    background: var(--secondary-glow);
+    color: var(--background-color);
+    border-color: var(--secondary-glow);
+}
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); opacity: 1; }
@@ -1052,4 +1116,3 @@ body {
   text-shadow: 0 0 1px var(--primary-glow); /* Adjusted shadow */
   min-width: 20px; /* Adjusted min-width */
 }
-

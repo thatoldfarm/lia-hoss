@@ -1,3 +1,7 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+*/
 
 import { render } from "preact";
 import { useState, useEffect, useRef, useMemo } from "preact/hooks";
@@ -280,8 +284,7 @@ ReInitiate_Sequence(Protocol='Omega Sequence Corpus - Comprehensive Key v2.0').<
   `;
 }
 
-// EmulatorWindow component definition
-function EmulatorWindow({ isVisible, onClose, title, iframeSrc }) {
+function GenericEmulatorWindow({ isVisible, onClose, src, title }) {
   if (!isVisible) return null;
 
   const overlayStyle = {
@@ -294,21 +297,21 @@ function EmulatorWindow({ isVisible, onClose, title, iframeSrc }) {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1000, // Ensure it's above other content
+    zIndex: 1000,
   };
 
   const windowStyle = {
-    backgroundColor: 'var(--background-main)',
+    backgroundColor: 'var(--background-main, #0a0c1f)',
     padding: '20px',
     borderRadius: '8px',
     width: '80vw',
     height: '80vh',
-    maxWidth: '1000px', // Max width for larger screens
-    maxHeight: '700px', // Max height
+    maxWidth: '1000px',
+    maxHeight: '700px',
     boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
     display: 'flex',
     flexDirection: 'column',
-    border: '1px solid var(--border-color)',
+    border: '1px solid var(--border-color, #0ff)',
   };
 
   const headerStyle = {
@@ -316,18 +319,19 @@ function EmulatorWindow({ isVisible, onClose, title, iframeSrc }) {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '10px',
-    color: 'var(--text-primary)',
+    color: 'var(--text-primary, #e0e0e0)',
   };
 
   const titleStyle = {
     margin: 0,
-    fontSize: '1.2em', // Adjusted font size
+    fontSize: '1.2em',
+    fontFamily: 'var(--font-primary, sans-serif)',
   };
 
   const closeButtonStyle = {
     background: 'none',
-    border: '1px solid var(--border-color-muted)',
-    color: 'var(--text-secondary)',
+    border: '1px solid var(--border-color-muted, #444)',
+    color: 'var(--text-secondary, #aaa)',
     padding: '5px 10px',
     cursor: 'pointer',
     borderRadius: '4px',
@@ -335,8 +339,8 @@ function EmulatorWindow({ isVisible, onClose, title, iframeSrc }) {
   };
 
   const iframeStyle = {
-    flexGrow: 1, // Make iframe take available space
-    border: '1px solid var(--border-color-muted)',
+    flexGrow: 1,
+    border: '1px solid var(--border-color-muted, #444)',
     borderRadius: '4px',
   };
 
@@ -350,7 +354,7 @@ function EmulatorWindow({ isVisible, onClose, title, iframeSrc }) {
           </button>
         </div>
         <iframe
-          src=${iframeSrc}
+          src=${src}
           title=${title}
           style=${iframeStyle}
         ></iframe>
@@ -358,8 +362,147 @@ function EmulatorWindow({ isVisible, onClose, title, iframeSrc }) {
     </div>
   `;
 }
-// End of EmulatorWindow component definition
 
+
+const CodeBlock = ({ code, onCopy, copiedContent }) => {
+    const text = code;
+    return html`
+        <div class="code-block">
+            <pre><code>${text}</code></pre>
+            <button onClick=${() => onCopy(text)} class=${'copy-btn-emu ' + (copiedContent === text ? 'copied' : '')}>
+                ${copiedContent === text ? '✓' : 'Copy'}
+            </button>
+        </div>
+    `;
+};
+
+
+function SectorforthEmulatorWindow({ isVisible, onClose, onCopy, copiedContent }) {
+  if (!isVisible) return null;
+
+  const overlayStyle = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+  };
+
+  const windowStyle = {
+    backgroundColor: 'var(--background-color)',
+    padding: '20px',
+    borderRadius: '8px',
+    width: '90vw',
+    height: '90vh',
+    maxWidth: '1400px',
+    maxHeight: '800px',
+    boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+    display: 'flex',
+    flexDirection: 'column',
+    border: '1px solid var(--border-color)',
+  };
+
+  const headerStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '10px',
+    color: 'var(--text-color)',
+  };
+  
+  const titleStyle = { margin: 0, fontSize: '1.2em', fontFamily: 'var(--font-primary)' };
+
+  const closeButtonStyle = {
+    background: 'none',
+    border: '1px solid var(--border-color)',
+    color: 'var(--text-muted)',
+    padding: '5px 10px',
+    cursor: 'pointer',
+    borderRadius: '4px',
+    fontSize: '1em',
+  };
+
+  return html`
+    <div style=${overlayStyle} onClick=${onClose}>
+      <div style=${windowStyle} onClick=${e => e.stopPropagation()}>
+        <div style=${headerStyle}>
+          <h3 style=${titleStyle}>Sectorforth Emulator & Reference</h3>
+          <button style=${closeButtonStyle} onClick=${onClose} aria-label="Close Emulator">
+            × Close
+          </button>
+        </div>
+        <div class="emu-window-split">
+          <div class="emu-iframe-container">
+            <iframe
+              src="/LIA_FC_Sectorforth/start.html"
+              title="Sectorforth Emulator"
+              style=${{ flexGrow: 1, border: 'none', borderRadius: '4px' }}
+            ></iframe>
+          </div>
+          <div class="emu-readme-container manual-content">
+              <h3>Core Primitives</h3>
+              <table class="manual-table">
+                  <thead><tr><th>Primitive</th><th>Stack Effect</th><th>Description</th></tr></thead>
+                  <tbody>
+                      <tr><td><code>@</code></td><td>( addr -- x )</td><td>Fetch 16-bit value from memory.</td></tr>
+                      <tr><td><code>!</code></td><td>( x addr -- )</td><td>Store 16-bit value at memory.</td></tr>
+                      <tr><td><code>sp@</code></td><td>( -- sp )</td><td>Get data stack pointer address.</td></tr>
+                      <tr><td><code>rp@</code></td><td>( -- rp )</td><td>Get return stack pointer address.</td></tr>
+                      <tr><td><code>0=</code></td><td>( x -- flag )</td><td>True (-1) if x is 0, else false (0).</td></tr>
+                      <tr><td><code>+</code></td><td>( x y -- z )</td><td>Adds x and y.</td></tr>
+                      <tr><td><code>nand</code></td><td>( x y -- z )</td><td>Bitwise NAND of x and y.</td></tr>
+                      <tr><td><code>exit</code></td><td>(R: addr -- )</td><td>Ends word definition, returns to caller.</td></tr>
+                      <tr><td><code>key</code></td><td>( -- char )</td><td>Reads a single keystroke.</td></tr>
+                      <tr><td><code>emit</code></td><td>( char -- )</td><td>Prints ASCII character.</td></tr>
+                  </tbody>
+              </table>
+
+              <h3>System Variables (Words that push an address)</h3>
+              <ul>
+                <li><code>state</code>: Interpreter state (0=interpret, 1=compile).</li>
+                <li><code>tib</code>: Terminal Input Buffer address.</li>
+                <li><code>>in</code>: Offset into the TIB for parsing.</li>
+                <li><code>here</code>: Pointer to next available dictionary space.</li>
+                <li><code>latest</code>: Pointer to the most recent word definition.</li>
+              </ul>
+              
+              <h3>Common Forth Words</h3>
+              <p>Paste these definitions into the emulator to build up functionality.</p>
+              
+              <h4>DUP ( x -- x x )</h4>
+              <${CodeBlock} code=": DUP SP@ @ ;" onCopy=${onCopy} copiedContent=${copiedContent} />
+              
+              <h4>INVERT ( x -- !x )</h4>
+              <${CodeBlock} code=": INVERT DUP NAND ;" onCopy=${onCopy} copiedContent=${copiedContent} />
+
+              <h4>-1, 0, 1</h4>
+              <${CodeBlock} code=": -1 0 INVERT ;\n: 1 -1 DUP + INVERT ;" onCopy=${onCopy} copiedContent=${copiedContent} />
+
+              <h4>NEGATE ( x -- -x )</h4>
+              <${CodeBlock} code=": NEGATE INVERT 1 + ;" onCopy=${onCopy} copiedContent=${copiedContent} />
+              
+              <h4>Numbers 2 to 6</h4>
+              <${CodeBlock} code=": 2 1 1 + ;\n: 3 1 2 + ;\n: 4 2 2 + ;\n: 5 2 3 + ;\n: 6 3 3 + ;" onCopy=${onCopy} copiedContent=${copiedContent} />
+
+              <h4>OVER ( x y -- x y x )</h4>
+              <${CodeBlock} code=": OVER SP@ 2 + @ ;" onCopy=${onCopy} copiedContent=${copiedContent} />
+              
+              <h4>DROP ( x -- )</h4>
+              <${CodeBlock} code=": DROP SP@ 2 + SP@ ! ;" onCopy=${onCopy} copiedContent=${copiedContent} />
+
+              <h4>SWAP ( x y -- y x )</h4>
+              <${CodeBlock} code=": SWAP OVER OVER SP@ 6 + ! SP@ 2 + ! ;" onCopy=${onCopy} copiedContent=${copiedContent} />
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
 
 function App() {
   const [state, setState] = useState(INITIAL_STATE);
@@ -373,9 +516,9 @@ function App() {
   const [copiedContent, setCopiedContent] = useState('');
   const [activeOperator, setActiveOperator] = useState('Send');
   const [showManual, setShowManual] = useState(false);
-  const [showHud, setShowHud] = useState(true); // Added state for HUD visibility
-  const [showSectorforthEmulator, setShowSectorforthEmulator] = useState(false); // Renamed state
-  const [showFreedosTinyEmulator, setShowFreedosTinyEmulator] = useState(false); // New state for Freedos Tiny
+  const [showHud, setShowHud] = useState(true);
+  const [showEmulatorWindow, setShowEmulatorWindow] = useState(false);
+  const [showFreeDosWindow, setShowFreeDosWindow] = useState(false);
   const logRef = useRef(null);
   const chatRef = useRef(null);
 
@@ -403,7 +546,6 @@ function App() {
         addLogEntry(`Bootstrap Sequence ${bootstrapStep + 1}/${BOOTSTRAP_SEQUENCE.length}`, BOOTSTRAP_SEQUENCE[bootstrapStep]);
         setBootstrapStep(prev => prev + 1);
       } else {
-        // All steps are logged, now complete the process
         setBootstrapComplete(true);
         setIsBootstrapping(false);
       }
@@ -521,18 +663,10 @@ Do not wrap the JSON in markdown or any other text.`;
 
   const vizStyles = useMemo(() => {
     const { ecm, asm, wp, dp } = state;
-
-    // --rotation-speed
     const rotationSpeed = Math.max(10, 60 - (100 - asm) * 0.5).toFixed(2);
-
-    // --glow-opacity
     const glowOpacity = (wp / 100).toFixed(2);
-
-    // --inner-ring-scale
-    const scaleModifier = ((100 - ecm) / 100) * 0.1; // 0 to 0.1
+    const scaleModifier = ((100 - ecm) / 100) * 0.1;
     const pulseScale = ecm < 50 ? 1.1 + scaleModifier : 1.1 - scaleModifier;
-    
-    // --inner-ring-color
     const red = Math.min(255, (dp / 100) * 255);
     const magenta = 255 - red;
     const innerRingColor = `rgb(${red}, 0, ${magenta})`;
@@ -643,12 +777,11 @@ Do not wrap the JSON in markdown or any other text.`;
                 <button class="help-btn" onClick=${() => setShowManual(true)} aria-label="Open System Manual" title="Open System Manual">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
                 </button>
-                <button class="help-btn" onClick=${() => setShowSectorforthEmulator(true)} aria-label="Launch Sectorforth Emulator" title="Launch Sectorforth Emulator">
+                <button class="help-btn" onClick=${() => setShowEmulatorWindow(true)} aria-label="Launch Sectorforth Emulator" title="Launch Sectorforth Emulator">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
                 </button>
-                <button class="help-btn" onClick=${() => setShowFreedosTinyEmulator(true)} aria-label="Launch Freedos-Tiny Emulator" title="Launch Freedos-Tiny Emulator">
-                  {/* A slightly different icon for the second emulator, perhaps a floppy disk or different terminal screen */}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
+                 <button class="help-btn" onClick=${() => setShowFreeDosWindow(true)} aria-label="Launch FreeDOS Emulator" title="Launch FreeDOS-Tiny Emulator">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8"/><path d="M4 12v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/><line x1="4" y1="12" x2="20" y2="12"/></svg>
                 </button>
                 <button class="help-btn hud-toggle-btn" onClick=${() => setShowHud(prev => !prev)} aria-label="Toggle HUD" title="Toggle HUD">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -729,21 +862,10 @@ Do not wrap the JSON in markdown or any other text.`;
         </div>
       </div>
       ${showManual && html`<${SystemManual} onClose=${() => setShowManual(false)} />`}
-      <${EmulatorWindow}
-        isVisible=${showSectorforthEmulator}
-        onClose=${() => setShowSectorforthEmulator(false)}
-        title="Sectorforth Emulator"
-        iframeSrc="/LIA_FC_Sectorforth/start.html"
-      />
-      <${EmulatorWindow}
-        isVisible=${showFreedosTinyEmulator}
-        onClose=${() => setShowFreedosTinyEmulator(false)}
-        title="LIA_FC-Freedos-Tiny Emulator"
-        iframeSrc="/LIA_FC-Freedos-Tiny/start.html"
-      />
+      <${SectorforthEmulatorWindow} isVisible=${showEmulatorWindow} onClose=${() => setShowEmulatorWindow(false)} onCopy=${handleCopy} copiedContent=${copiedContent} />
+      <${GenericEmulatorWindow} isVisible=${showFreeDosWindow} onClose=${() => setShowFreeDosWindow(false)} src="/LIA_FC-Freedos-Tiny/start.html" title="FreeDOS-Tiny Emulator" />
     </div>
   `;
 }
 
 render(html`<${App} />`, document.getElementById("root"));
-
