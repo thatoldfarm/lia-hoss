@@ -4,6 +4,83 @@
     <meta charset="UTF-8">
     <title>File Decoder from Chunky HTML</title>
     <script src="pako_inflate.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+        }
+        #emulator-container {
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+        #screen_container {
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px; /* Adjust as needed */
+        }
+        #reference-panel {
+            border: 1px solid #333;
+            padding: 15px;
+            background-color: #252526;
+        }
+        #reference-panel h1 {
+            font-size: 1.5rem;
+            color: #569cd6;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        .command-item {
+            margin-bottom: 1rem;
+            position: relative;
+            background: #2a2a2e;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 0.75rem;
+        }
+        .command-item h4 {
+            font-size: 1.1rem;
+            color: #9cdcfe;
+            margin: 0 0 0.5rem 0;
+            padding-right: 60px; /* Space for copy button */
+        }
+        .command-item p {
+            font-size: 0.9em;
+            color: #cccccc;
+            margin: 0;
+        }
+        .command-item code {
+            background: #1e1e1e;
+            color: #ce9178;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #3c3c3c;
+            border: 1px solid #555;
+            color: #ccc;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover {
+            background: #4f4f4f;
+        }
+        .copy-btn.copied {
+            background: #569cd6;
+            color: #fff;
+        }
+    </style>
     <script>
     "use strict";
 
@@ -29,6 +106,23 @@
             autostart: true,
         });
     };
+
+    function copyText(button, text) {
+        if (!navigator.clipboard) {
+            return;
+        }
+        navigator.clipboard.writeText(text).then(function() {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+            setTimeout(function() {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 2000);
+        }, function(err) {
+            console.error('Could not copy text: ', err);
+        });
+    }
     </script>
 </head>
 <body>
@@ -41,6 +135,34 @@
             <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
             <canvas style="display: none"></canvas>
         </div>
+    </div>
+    <div id="reference-panel">
+        <h1>Common FreeDOS Commands</h1>
+
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'DIR')">Copy</button>DIR</h4><p>Lists files and directories. <br>Usage: <code>DIR [/?]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'CD ')">Copy</button>CD</h4><p>Changes the current directory. <br>Usage: <code>CD [directory]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'MD ')">Copy</button>MD / MKDIR</h4><p>Creates a new directory. <br>Usage: <code>MD [directory]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'RD ')">Copy</button>RD / RMDIR</h4><p>Removes a directory. <br>Usage: <code>RD [directory]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'DEL ')">Copy</button>DEL / ERASE</h4><p>Deletes a file. <br>Usage: <code>DEL [file]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'COPY ')">Copy</button>COPY</h4><p>Copies files. <br>Usage: <code>COPY [source] [dest]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'XCOPY ')">Copy</button>XCOPY</h4><p>Extended copy for directories. <br>Usage: <code>XCOPY [source] [dest]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'MOVE ')">Copy</button>MOVE</h4><p>Moves files or directories. <br>Usage: <code>MOVE [source] [dest]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'TYPE ')">Copy</button>TYPE</h4><p>Displays file contents. <br>Usage: <code>TYPE [file]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'EDIT')">Copy</button>EDIT</h4><p>Opens a basic text editor. <br>Usage: <code>EDIT [file]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'MEM')">Copy</button>MEM</h4><p>Displays memory usage.</p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'CLS')">Copy</button>CLS</h4><p>Clears the screen.</p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'ECHO ')">Copy</button>ECHO</h4><p>Displays a message. <br>Usage: <code>ECHO [message]</code></p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'SET')">Copy</button>SET</h4><p>Manages environment variables.</p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'PATH')">Copy</button>PATH</h4><p>Sets executable search path.</p></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'EXIT')">Copy</button>EXIT</h4><p>Exits the command shell.</p></div>
+
+        <h1>Files on Disk</h1>
+
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'AUTOEXEC.BAT')">Copy</button>AUTOEXEC.BAT</h4></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'COMMAND.COM')">Copy</button>COMMAND.COM</h4></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'CONFIG.SYS')">Copy</button>CONFIG.SYS</h4></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'KERNEL.SYS')">Copy</button>KERNEL.SYS</h4></div>
+        <div class="command-item"><h4><button class="copy-btn" onclick="copyText(this, 'README.TXT')">Copy</button>README.TXT</h4></div>
     </div>
     <script>
         var blobs = {};
@@ -102,7 +224,23 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // ContentLoaded listener is now primarily for setting up the decode button
+            // Attempt to auto-load chunky.html
+            fetch('chunky.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('chunky.html not found or fetch failed');
+                    }
+                    return response.text();
+                })
+                .then(content => {
+                    processDataFromChunkyHTML(content);
+                    loadEmulator();
+                })
+                .catch(error => {
+                    console.warn('Automatic loading of chunky.html failed:', error);
+                    // Optionally, inform the user that they might need to load manually
+                    // For example: document.getElementById('statusMessage').textContent = 'Auto-load failed. Please use manual load.';
+                });
         });
 
         document.getElementById('decodeButton').addEventListener('click', function() {
