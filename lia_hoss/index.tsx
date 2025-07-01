@@ -281,8 +281,146 @@ ReInitiate_Sequence(Protocol='Omega Sequence Corpus - Comprehensive Key v2.0').<
 }
 
 // EmulatorWindow component definition
+
+const forthSnippets = [
+  // --- Primitives ---
+  {
+    title: "@ (fetch)",
+    description: "( addr -- x ) Fetches value x from address addr.",
+    code: "@"
+  },
+  {
+    title: "! (store)",
+    description: "( x addr -- ) Stores value x at address addr.",
+    code: "!"
+  },
+  {
+    title: "EMIT",
+    description: "( char -- ) Prints ASCII character.",
+    code: "EMIT"
+  },
+  {
+    title: "KEY",
+    description: "( -- char ) Reads a keystroke.",
+    code: "KEY"
+  },
+  {
+    title: "+ (add)",
+    description: "( x y -- z ) Adds x and y, leaves sum z.",
+    code: "+"
+  },
+  {
+    title: "NAND",
+    description: "( x y -- z ) Bitwise NAND of x and y.",
+    code: "NAND"
+  },
+  {
+    title: "0= (is zero?)",
+    description: "( x -- flag ) -1 if x is 0, else 0.",
+    code: "0="
+  },
+  // --- Basic Word Definitions ---
+  {
+    title: "Define DUP",
+    description: ": DUP ( x -- x x ) SP@ @ ;",
+    code: ": DUP SP@ @ ;"
+  },
+  {
+    title: "Define 0 and 1",
+    description: (
+      "Defines numbers 0 and 1 using DUP, NAND, +.\n" +
+      "Requires DUP to be defined first.\n" +
+      ": -1 DUP DUP NAND DUP DUP NAND NAND ;\n" +
+      ": 0 -1 DUP NAND ;\n" +
+      ": 1 -1 DUP + DUP NAND ;"
+    ),
+    code: ": -1 DUP DUP NAND DUP DUP NAND NAND ;\n: 0 -1 DUP NAND ;\n: 1 -1 DUP + DUP NAND ;"
+  },
+  {
+    title: "Define OVER",
+    description: ": OVER ( x y -- x y x ) SP@ 2 + @ ; \n(Requires 2 to be defined, e.g., : 2 1 1 + ;)",
+    code: ": OVER SP@ 2 + @ ;"
+  },
+  {
+    title: "Define SWAP",
+    description: ": SWAP ( x y -- y x ) OVER OVER SP@ 6 + ! SP@ 2 + ! ; \n(Requires OVER, 2, 4, 6 to be defined or accessible)",
+    code: ": SWAP OVER OVER SP@ 6 + ! SP@ 2 + ! ;"
+  },
+  {
+    title: "Define INVERT (NOT)",
+    description: ": INVERT ( x -- !x ) DUP NAND ; \n(Requires DUP)",
+    code: ": INVERT DUP NAND ;"
+  },
+  {
+    title: "Define NEGATE",
+    description: ": NEGATE ( x -- -x ) INVERT 1 + ; \n(Requires INVERT, 1, +)",
+    code: ": NEGATE INVERT 1 + ;"
+  },
+  // --- Simple Program Example ---
+  {
+    title: "Print 'HI'",
+    description: (
+      "Prints 'HI' using EMIT. Assumes 72 (H) and 73 (I) can be pushed.\n" +
+      ": PRINT-HI 72 EMIT 73 EMIT ;\n" +
+      "PRINT-HI"
+    ),
+    code: ": PRINT-HI 72 EMIT 73 EMIT ;\nPRINT-HI"
+  },
+  {
+    title: "Colon Definition Structure",
+    description: "( name --- ) : MYWORD ...body... ;",
+    code: ": MYWORD \\\\ your code here \n;\n\nMYWORD \\\\ to run it"
+  },
+  // --- System Variables (as words) ---
+  {
+    title: "STATE (get address)",
+    description: "( -- addr_state ) Pushes address of 'state' variable.",
+    code: "STATE"
+  },
+  {
+    title: "HERE (get address)",
+    description: "( -- addr_here ) Pushes address of 'here' pointer.",
+    code: "HERE"
+  },
+  {
+    title: "LATEST (get address)",
+    description: "( -- addr_latest ) Pushes address of 'latest' word pointer.",
+    code: "LATEST"
+  },
+  {
+    title: "TIB (get address)",
+    description: "( -- addr_tib ) Pushes address of Terminal Input Buffer.",
+    code: "TIB"
+  },
+  {
+    title: ">IN (get address)",
+    description: "( -- addr_to_in ) Pushes address of '>in' offset variable.",
+    code: ">IN"
+  }
+];
+
 function EmulatorWindow({ isVisible, onClose }) {
   if (!isVisible) return null;
+
+  const [showSnippets, setShowSnippets] = useState(false);
+  const [copiedSnippetTitle, setCopiedSnippetTitle] = useState(''); // For copy feedback
+
+  const handleSnippetCopy = (codeToCopy, title) => {
+    if (!navigator.clipboard) {
+      // Fallback or error for older browsers
+      console.error('Clipboard API not available.');
+      // Optionally, implement a textarea-based fallback here
+      alert('Clipboard API not available. Could not copy.');
+      return;
+    }
+    navigator.clipboard.writeText(codeToCopy).then(() => {
+      setCopiedSnippetTitle(title);
+      setTimeout(() => setCopiedSnippetTitle(''), 2000); // Reset after 2 seconds
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+      alert('Failed to copy text. See console for details.');
+    });
+  };
 
   const overlayStyle = {
     position: 'fixed',
@@ -324,6 +462,17 @@ function EmulatorWindow({ isVisible, onClose }) {
     fontSize: '1.2em', // Adjusted font size
   };
 
+  const snippetsButtonStyle = {
+    background: 'none',
+    border: '1px solid var(--border-color-muted)',
+    color: 'var(--text-secondary)',
+    padding: '5px 10px',
+    cursor: 'pointer',
+    borderRadius: '4px',
+    fontSize: '0.9em',
+    marginRight: '10px',
+  };
+
   const closeButtonStyle = {
     background: 'none',
     border: '1px solid var(--border-color-muted)',
@@ -345,10 +494,63 @@ function EmulatorWindow({ isVisible, onClose }) {
       <div style=${windowStyle} onClick=${e => e.stopPropagation()}>
         <div style=${headerStyle}>
           <h3 style=${titleStyle}>Sectorforth Emulator</h3>
-          <button style=${closeButtonStyle} onClick=${onClose} aria-label="Close Emulator">
-            × Close
-          </button>
+          <div>
+            <button style=${snippetsButtonStyle} onClick=${() => setShowSnippets(prev => !prev)}>
+              {showSnippets ? 'Hide' : 'Show'} Forth Snippets
+            </button>
+            <button style=${closeButtonStyle} onClick=${onClose} aria-label="Close Emulator">
+              × Close
+            </button>
+          </div>
         </div>
+        ${showSnippets && html`
+          <div class="snippets-panel" style=${{
+            position: 'absolute',
+            top: '60px', // Below header
+            left: '20px',
+            right: '20px',
+            bottom: '20px',
+            backgroundColor: 'rgba(var(--background-main-rgb), 0.95)', // Use RGB version of background for opacity
+            border: '1px solid var(--border-color-muted)',
+            borderRadius: '4px',
+            padding: '15px',
+            overflowY: 'auto',
+            zIndex: 1001, // Above iframe but below modal controls if any overlap
+            color: 'var(--text-secondary)',
+          }}>
+            ${forthSnippets.map(snippet => html`
+              <div class="snippet-item" style=${{ marginBottom: '15px', paddingBottom: '10px', borderBottom: '1px solid var(--border-color-muted)'}}>
+                <h4 style=${{ marginTop: 0, marginBottom: '5px', color: 'var(--text-primary)'}}>${snippet.title}</h4>
+                <p style=${{ fontSize: '0.9em', marginBottom: '8px', whiteSpace: 'pre-wrap' }}>${snippet.description}</p>
+                <pre style=${{
+                  backgroundColor: 'var(--background-code)',
+                  padding: '10px',
+                  borderRadius: '4px',
+                  overflowX: 'auto',
+                  fontSize: '0.85em',
+                  border: '1px solid var(--border-color-darker)',
+                  color: 'var(--text-code)',
+                }}><code>${snippet.code}</code></pre>
+                <button
+                  class="snippet-copy-btn"
+                  style=${{
+                    marginTop: '5px',
+                    padding: '3px 8px',
+                    fontSize: '0.8em',
+                    backgroundColor: 'var(--button-background)',
+                    color: 'var(--button-text)',
+                    border: '1px solid var(--button-border)',
+                    borderRadius: '3px',
+                    cursor: 'pointer',
+                  }}
+                  onClick=${() => handleSnippetCopy(snippet.code, snippet.title)}
+                >
+                  {copiedSnippetTitle === snippet.title ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+            `)}
+          </div>
+        `}
         <iframe
           src="/LIA_FC_Sectorforth/start.html"
           title="Sectorforth Emulator"

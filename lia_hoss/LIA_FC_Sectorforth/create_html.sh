@@ -3,9 +3,9 @@
 # Directory containing the JSON chunks (relative to this script's location)
 chunks_dir="outputs/chunks"
 
-# Define project root relative to script location (e.g. if script is in my_project/src/scripts, project_root is ../../)
-# Assuming this script is in lia_hoss/src/LIA_FC_Sectorforth/
-PROJECT_ROOT_REL_FROM_SCRIPT_DIR="../../"
+# Define project root relative to script location
+# If this script is in lia_hoss/LIA_FC_Sectorforth/ and lia_hoss/ is the project root (where public/ resides)
+PROJECT_ROOT_REL_FROM_SCRIPT_DIR="../"
 PUBLIC_ASSET_DIR="${PROJECT_ROOT_REL_FROM_SCRIPT_DIR}public/LIA_FC_Sectorforth"
 
 # Create the public asset directory if it doesn't exist
