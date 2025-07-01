@@ -957,7 +957,7 @@ body {
 /* NEW HUD STYLES TO ALIGN WITH INTERACTION PANEL */
 .hud-container {
   position: fixed;
-  top: 1rem;
+  top: 0.5rem; /* Adjusted to move HUD up slightly */
   z-index: 1000;
 
   /* Default for < 1600px viewport (specifically targets viewports between 1200px and 1599.98px due to media query order) */
