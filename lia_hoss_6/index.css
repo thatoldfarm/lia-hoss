@@ -961,7 +961,7 @@ body {
   z-index: 1000;
 
   /* Default for < 1600px viewport (specifically targets viewports between 1200px and 1599.98px due to media query order) */
-  left: calc(var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop));
+  left: calc(var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop) + ((100vw - (2 * var(--app-padding-desktop)) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.005));
   width: calc((100vw - (2 * var(--app-padding-desktop)) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.99);
   right: auto;
   transform: none;
@@ -970,7 +970,7 @@ body {
 /* For viewport >= 1600px (app-container is centered 1600px box) */
 @media (min-width: 1600px) {
   .hud-container {
-    left: calc(((100vw - var(--app-max-width)) / 2) + var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop));
+    left: calc(((100vw - var(--app-max-width)) / 2) + var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop) + ((var(--app-max-width) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.005));
     /* Width of the 1fr column when app-container is 1600px wide */
     width: calc((var(--app-max-width) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.99);
   }
@@ -980,7 +980,7 @@ body {
 /* Uses tablet-specific column widths, gaps, and padding */
 @media (max-width: 1199.98px) {
   .hud-container {
-    left: calc(var(--app-padding-tablet) + var(--col1-width-tablet) + var(--grid-gap-tablet));
+    left: calc(var(--app-padding-tablet) + var(--col1-width-tablet) + var(--grid-gap-tablet) + ((100vw - (2 * var(--app-padding-tablet)) - var(--col1-width-tablet) - var(--col3-width-tablet) - (2 * var(--grid-gap-tablet))) * 0.005));
     width: calc((100vw - (2 * var(--app-padding-tablet)) - var(--col1-width-tablet) - var(--col3-width-tablet) - (2 * var(--grid-gap-tablet))) * 0.99);
   }
 }
