@@ -1007,7 +1007,7 @@ body {
   border: 1px solid var(--border-color);
   backdrop-filter: blur(10px);
   border-radius: 6px;
-  padding: 0.3rem 1rem; /* Further reduced vertical padding for ~10% height decrease */
+  padding: 0.1rem 1rem; /* Drastically reduced vertical padding for 50% height target */
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.1), inset 0 0 8px rgba(0, 255, 255, 0.05);
   display: flex;
   align-items: center;
@@ -1016,39 +1016,39 @@ body {
 
 .hud-title {
   font-family: var(--font-primary);
-  font-size: 0.9rem; /* Reduced font size */
+  font-size: 0.6rem; /* Significantly reduced for 50% height target */
   text-transform: uppercase;
-  letter-spacing: 1px; /* Reduced letter spacing */
+  letter-spacing: 0.5px; /* Adjusted for smaller font */
   color: var(--primary-glow);
-  text-shadow: 0 0 3px var(--primary-glow); /* Adjusted shadow */
-  margin-right: 0.75rem; /* Reduced margin */
-  padding-right: 0.75rem; /* Reduced padding */
+  text-shadow: 0 0 2px var(--primary-glow); /* Adjusted shadow */
+  margin-right: 0.4rem; /* Adjusted for smaller font */
+  padding-right: 0.4rem; /* Adjusted for smaller font */
   border-right: 1px solid var(--border-color);
 }
 
 .hud-grid {
   display: flex;
-  gap: 1rem; /* Reduced gap */
+  gap: 0.5rem; /* Significantly reduced gap */
 }
 
 .hud-item {
   display: flex;
   align-items: baseline;
-  gap: 0.3rem; /* Reduced gap */
+  gap: 0.2rem; /* Significantly reduced gap */
 }
 
 .hud-label {
   font-family: var(--font-primary);
-  font-size: 0.7rem; /* Reduced font size */
+  font-size: 0.5rem; /* Significantly reduced for 50% height target */
   color: var(--text-muted);
   text-transform: uppercase;
 }
 
 .hud-value {
   font-family: var(--font-secondary);
-  font-size: 0.9rem; /* Reduced font size */
+  font-size: 0.6rem; /* Significantly reduced for 50% height target */
   font-weight: 700;
   color: var(--primary-glow);
-  text-shadow: 0 0 2px var(--primary-glow); /* Adjusted shadow */
-  min-width: 30px; /* Reduced min-width */
+  text-shadow: 0 0 1px var(--primary-glow); /* Adjusted shadow */
+  min-width: 20px; /* Adjusted min-width */
 }
