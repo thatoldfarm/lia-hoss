@@ -1,10 +1,18 @@
 #!/bin/bash
 
-# Directory containing the JSON chunks
+# Directory containing the JSON chunks (relative to this script's location)
 chunks_dir="outputs/chunks"
 
-# The HTML file to be created
-output_html="chunky.html"
+# Define project root relative to script location (e.g. if script is in my_project/src/scripts, project_root is ../../)
+# Assuming this script is in lia_hoss/src/LIA_FC_Sectorforth/
+PROJECT_ROOT_REL_FROM_SCRIPT_DIR="../../"
+PUBLIC_ASSET_DIR="${PROJECT_ROOT_REL_FROM_SCRIPT_DIR}public/LIA_FC_Sectorforth"
+
+# Create the public asset directory if it doesn't exist
+mkdir -p "$PUBLIC_ASSET_DIR"
+
+# The HTML file to be created in the public asset directory
+output_html="${PUBLIC_ASSET_DIR}/chunky.html"
 
 # Start the HTML file with some basic structure
 echo '<!DOCTYPE html>' > $output_html
