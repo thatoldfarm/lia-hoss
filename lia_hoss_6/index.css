@@ -134,12 +134,18 @@ body {
 .vector-item-label .symbol {
     font-family: var(--font-primary);
     color: var(--text-color);
+    min-width: 0; /* Allow shrinking in flex layout */
+    overflow-wrap: break-word; /* Allow long words to break */
+    margin-right: 0.5rem; /* Add a small gap between symbol and value if they get close */
 }
 
 .vector-item-label .value {
     color: var(--primary-glow);
     font-weight: 700;
     text-shadow: 0 0 3px var(--primary-glow);
+    min-width: 0; /* Allow shrinking */
+    overflow-wrap: break-word;
+    text-align: right;
 }
 
 .vector-item-label .status-value {
@@ -148,6 +154,9 @@ body {
     font-family: var(--font-primary);
     text-transform: uppercase;
     font-size: 0.9rem;
+    min-width: 0; /* Allow shrinking */
+    overflow-wrap: break-word;
+    text-align: right;
 }
 
 
@@ -953,7 +962,7 @@ body {
 
   /* Default for < 1600px viewport (specifically targets viewports between 1200px and 1599.98px due to media query order) */
   left: calc(var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop));
-  width: calc(100vw - (2 * var(--app-padding-desktop)) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop)));
+  width: calc((100vw - (2 * var(--app-padding-desktop)) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.99);
   right: auto;
   transform: none;
 }
@@ -963,7 +972,7 @@ body {
   .hud-container {
     left: calc(((100vw - var(--app-max-width)) / 2) + var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop));
     /* Width of the 1fr column when app-container is 1600px wide */
-    width: calc(var(--app-max-width) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop)));
+    width: calc((var(--app-max-width) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.99);
   }
 }
 
@@ -972,7 +981,7 @@ body {
 @media (max-width: 1199.98px) {
   .hud-container {
     left: calc(var(--app-padding-tablet) + var(--col1-width-tablet) + var(--grid-gap-tablet));
-    width: calc(100vw - (2 * var(--app-padding-tablet)) - var(--col1-width-tablet) - var(--col3-width-tablet) - (2 * var(--grid-gap-tablet)));
+    width: calc((100vw - (2 * var(--app-padding-tablet)) - var(--col1-width-tablet) - var(--col3-width-tablet) - (2 * var(--grid-gap-tablet))) * 0.99);
   }
 }
 
