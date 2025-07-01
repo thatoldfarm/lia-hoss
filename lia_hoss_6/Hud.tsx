@@ -4,7 +4,7 @@ export function Hud({ state }) {
   return html`
     <div class="hud-container">
       <div class="hud-panel">
-        <h3 class="hud-title">System Status</h3>
+        <h3 class="hud-title">Status</h3>
         <div class="hud-grid">
           <div class="hud-item">
             <span class="hud-label">ECM:</span>

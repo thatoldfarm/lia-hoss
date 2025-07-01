@@ -543,6 +543,10 @@ body {
   stroke: currentColor;
 }
 
+.hud-toggle-btn svg { /* Ensure toggle button icon also uses currentColor */
+  stroke: currentColor;
+}
+
 .manual-overlay {
   position: fixed;
   top: 0;
@@ -835,7 +839,7 @@ body {
 /* HUD Styles */
 .hud-container {
   position: fixed;
-  top: 1rem;
+  bottom: 1rem; /* Changed from top to bottom */
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
@@ -848,9 +852,9 @@ body {
   background: var(--panel-bg);
   border: 1px solid var(--border-color);
   backdrop-filter: blur(10px);
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.1), inset 0 0 10px rgba(0, 255, 255, 0.05);
+  border-radius: 6px; /* Slightly smaller radius */
+  padding: 0.4rem 1rem; /* Reduced padding */
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.1), inset 0 0 8px rgba(0, 255, 255, 0.05); /* Adjusted shadow */
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -858,39 +862,39 @@ body {
 
 .hud-title {
   font-family: var(--font-primary);
-  font-size: 1rem;
+  font-size: 0.9rem; /* Reduced font size */
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px; /* Reduced letter spacing */
   color: var(--primary-glow);
-  text-shadow: 0 0 5px var(--primary-glow);
-  margin-right: 1rem;
-  padding-right: 1rem;
+  text-shadow: 0 0 3px var(--primary-glow); /* Adjusted shadow */
+  margin-right: 0.75rem; /* Reduced margin */
+  padding-right: 0.75rem; /* Reduced padding */
   border-right: 1px solid var(--border-color);
 }
 
 .hud-grid {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem; /* Reduced gap */
 }
 
 .hud-item {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 0.3rem; /* Reduced gap */
 }
 
 .hud-label {
   font-family: var(--font-primary);
-  font-size: 0.8rem;
+  font-size: 0.7rem; /* Reduced font size */
   color: var(--text-muted);
   text-transform: uppercase;
 }
 
 .hud-value {
   font-family: var(--font-secondary);
-  font-size: 1rem;
+  font-size: 0.9rem; /* Reduced font size */
   font-weight: 700;
   color: var(--primary-glow);
-  text-shadow: 0 0 3px var(--primary-glow);
-  min-width: 40px; /* Ensure consistent width for values */
+  text-shadow: 0 0 2px var(--primary-glow); /* Adjusted shadow */
+  min-width: 30px; /* Reduced min-width */
 }
