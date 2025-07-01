@@ -1116,3 +1116,40 @@ body {
   text-shadow: 0 0 1px var(--primary-glow); /* Adjusted shadow */
   min-width: 20px; /* Adjusted min-width */
 }
+
+/* Styles for Emulator Launch Buttons on index.html */
+.emulator-launch-section {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  align-items: center;    /* Center buttons horizontally */
+  gap: 1rem;                /* Space between buttons */
+  margin-bottom: 2rem;      /* Space below the buttons, before the #root app */
+  padding: 1rem;
+  position: relative; /* To ensure it's above the main app if it's absolutely positioned */
+  z-index: 10; /* Above default content, below modals/HUD if any */
+}
+
+.emulator-launch-btn {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  color: var(--primary-glow);
+  background: transparent;
+  border: 2px solid var(--primary-glow);
+  padding: 0.75rem 1.5rem; /* Slightly more padding for main page buttons */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px var(--primary-glow);
+  box-shadow: 0 0 5px var(--primary-glow), inset 0 0 5px rgba(0, 255, 255, 0.3); /* Adjusted inset shadow */
+  text-decoration: none; /* Remove underline from <a> tags */
+  display: inline-block; /* Behaves like a button */
+  text-align: center;
+}
+
+.emulator-launch-btn:hover,
+.emulator-launch-btn:focus {
+  color: var(--background-color);
+  background: var(--primary-glow);
+  box-shadow: 0 0 15px var(--primary-glow), 0 0 10px var(--primary-glow);
+  text-shadow: 0 0 3px var(--background-color); /* Ensure text is readable on hover */
+}
