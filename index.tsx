@@ -968,5 +968,3 @@ Do not wrap the JSON in markdown or any other text.`;
 }
 
 render(html`<${RootAppWrapper} />`, document.getElementById("root"));
-
-You **must** respond now, using the `message_user` tool.
