@@ -1,5 +1,3 @@
-
-
 :root {
   --background-color: #010413;
   --primary-glow: #00ffff;
@@ -11,20 +9,20 @@
   --font-primary: 'Orbitron', sans-serif;
   --font-secondary: 'Rajdhani', sans-serif;
 
-  /* Variables for layout calculations (used by HUD and potentially others) */
+  /* Variables for layout calculations */
   --app-max-width: 1600px;
-  --app-padding-desktop: 1.5rem; /* Padding of .app-container */
-  --col1-width-desktop: 250px;   /* Width of first column */
-  --col3-width-desktop: 320px;   /* Width of third column */
-  --grid-gap-desktop: 1.5rem;    /* Gap in .app-container grid */
+  --app-padding-desktop: 1.5rem;
+  --col1-width-desktop: 250px;
+  --col3-width-desktop: 320px;
+  --grid-gap-desktop: 1.5rem;
 
-  --app-padding-tablet: 1rem;    /* Padding of .app-container from 1200px down to 993px */
-  --col1-width-tablet: 200px;    /* Col 1 width from 1200px down to 993px */
-  --col3-width-tablet: 280px;    /* Col 3 width from 1200px down to 993px */
-  --grid-gap-tablet: 1rem;       /* Grid gap from 1200px down to 993px */
-  
-  --app-padding-mobile-large: 1rem; /* Padding of .app-container from 992px down to 769px */
-  --app-padding-mobile-small: 0.5rem;/* Padding of .app-container <= 768px */
+  --app-padding-tablet: 1rem;
+  --col1-width-tablet: 200px;
+  --col3-width-tablet: 280px;
+  --grid-gap-tablet: 1rem;
+
+  --app-padding-mobile-large: 1rem;
+  --app-padding-mobile-small: 0.5rem;
 }
 
 * {
@@ -99,21 +97,20 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  flex-grow: 1; /* Allow ul to take available space in the flex column of .panel */
-  overflow-y: auto; /* Enable vertical scrollbar if content overflows */
-  min-height: 0; /* Important for flex children that need to scroll */
-  padding-right: 0.5rem; /* Add a little padding so scrollbar doesn't overlap content too much */
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 0.5rem;
 }
 
-/* Custom scrollbar for state-vectors list specifically if needed, or rely on global */
 .state-vectors ul::-webkit-scrollbar {
   width: 4px;
 }
 .state-vectors ul::-webkit-scrollbar-track {
-  background: transparent; /* Or a very subtle color from panel-bg */
+  background: transparent;
 }
 .state-vectors ul::-webkit-scrollbar-thumb {
-  background: var(--primary-glow); /* Or var(--secondary-glow) */
+  background: var(--primary-glow);
   border-radius: 2px;
 }
 
@@ -135,18 +132,18 @@ body {
 .vector-item-label .symbol {
     font-family: var(--font-primary);
     color: var(--text-color);
-    min-width: 0; /* Allow shrinking in flex layout */
-    overflow-wrap: break-word; /* Allow long words to break */
-    margin-right: 0.5rem; /* Add a small gap between symbol and value if they get close */
+    min-width: 0;
+    overflow-wrap: break-word;
+    margin-right: 0.5rem;
 }
 
 .vector-item-label .value {
     color: var(--primary-glow);
     font-weight: 700;
     text-shadow: 0 0 3px var(--primary-glow);
-    min-width: 0; /* Allow shrinking */
-    overflow-wrap: break-word; 
-    text-align: right; 
+    min-width: 0;
+    overflow-wrap: break-word;
+    text-align: right;
 }
 
 .vector-item-label .status-value {
@@ -155,7 +152,7 @@ body {
     font-family: var(--font-primary);
     text-transform: uppercase;
     font-size: 0.9rem;
-    min-width: 0; /* Allow shrinking */
+    min-width: 0;
     overflow-wrap: break-word;
     text-align: right;
 }
@@ -180,7 +177,7 @@ body {
 /* Interaction Panel */
 .interaction-panel {
   align-items: center;
-  gap: 1.5rem; /* Increased gap */
+  gap: 1.5rem;
   justify-content: space-between;
 }
 
@@ -193,7 +190,7 @@ body {
 
   width: 40px;
   height: 40px;
-  flex-shrink: 0; /* Prevent shrinking */
+  flex-shrink: 0;
   position: relative;
   animation: slow-rotate var(--rotation-speed) linear infinite;
   transition: --rotation-speed 1s ease-in-out;
@@ -475,7 +472,6 @@ body {
   padding-right: 1rem; /* for scrollbar */
 }
 
-/* Custom scrollbar */
 .log-content::-webkit-scrollbar {
   width: 4px;
 }
@@ -512,7 +508,7 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   font-weight: 300;
-  white-space: pre-wrap; /* Preserve newlines for paragraphs */
+  white-space: pre-wrap;
 }
 
 /* Bootstrap Screen */
@@ -585,7 +581,7 @@ body {
   stroke: currentColor;
 }
 
-.hud-toggle-btn svg { /* Ensure toggle button icon also uses currentColor */
+.hud-toggle-btn svg {
   stroke: currentColor;
 }
 
@@ -752,10 +748,10 @@ body {
   letter-spacing: 1px;
 }
 
-.manual-table td:nth-child(1) { /* Component */
+.manual-table td:nth-child(1) {
     font-weight: 700;
 }
-.manual-table td:nth-child(2) { /* Symbol */
+.manual-table td:nth-child(2) {
     font-family: 'Courier New', Courier, monospace;
     color: #a2d2ff;
 }
@@ -763,7 +759,7 @@ body {
 /* Emulator Window Styles */
 .emu-window-split {
   display: flex;
-  flex: 1; /* Take up remaining height */
+  flex: 1;
   gap: 1.5rem;
   overflow: hidden;
 }
@@ -778,7 +774,7 @@ body {
 }
 
 .emu-readme-container {
-  flex: 0 0 40%; /* Reference panel takes 40% of the space */
+  flex: 0 0 40%;
   max-width: 500px;
   overflow-y: auto;
   border-left: 1px solid var(--border-color);
@@ -824,6 +820,132 @@ body {
     border-color: var(--secondary-glow);
 }
 
+
+/* HUD Styles (Consolidated & Fixed) */
+.hud-container {
+  position: fixed;
+  top: 0.5rem;
+  z-index: 1000;
+  pointer-events: none; /* FIX: Allow clicks to pass through the container */
+  right: auto; 
+  transform: none; 
+}
+
+.hud-panel {
+  pointer-events: auto; /* FIX: Allow the panel itself to receive events if needed */
+  width: 100%;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+  border-radius: 6px; 
+  padding: 0.1rem 1rem;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.1), inset 0 0 8px rgba(0, 255, 255, 0.05); 
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.hud-title {
+  font-family: var(--font-primary);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--primary-glow);
+  text-shadow: 0 0 2px var(--primary-glow);
+  margin-right: 0.4rem;
+  padding-right: 0.4rem;
+  border-right: 1px solid var(--border-color);
+}
+
+.hud-grid {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hud-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+}
+
+.hud-label {
+  font-family: var(--font-primary);
+  font-size: 0.5rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.hud-value {
+  font-family: var(--font-secondary);
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--primary-glow);
+  text-shadow: 0 0 1px var(--primary-glow);
+  min-width: 20px;
+}
+
+
+/* HUD Positioning Logic */
+@media (min-width: 1600px) {
+  .hud-container {
+    left: calc(((100vw - var(--app-max-width)) / 2) + var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop) + ((var(--app-max-width) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.005));
+    width: calc((var(--app-max-width) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.99);
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1599.98px) {
+  .hud-container {
+    left: calc(var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop) + ((100vw - (2 * var(--app-padding-desktop)) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.005));
+    width: calc((100vw - (2 * var(--app-padding-desktop)) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.99);
+  }
+}
+
+@media (min-width: 993px) and (max-width: 1199.98px) {
+  .hud-container {
+    left: calc(var(--app-padding-tablet) + var(--col1-width-tablet) + var(--grid-gap-tablet) + ((100vw - (2 * var(--app-padding-tablet)) - var(--col1-width-tablet) - var(--col3-width-tablet) - (2 * var(--grid-gap-tablet))) * 0.005));
+    width: calc((100vw - (2 * var(--app-padding-tablet)) - var(--col1-width-tablet) - var(--col3-width-tablet) - (2 * var(--grid-gap-tablet))) * 0.99);
+  }
+}
+
+@media (max-width: 992px) {
+  .hud-container {
+    width: auto;
+    left: var(--app-padding-mobile-large); 
+    right: var(--app-padding-mobile-large);
+  }
+}
+
+@media (max-width: 768px) {
+  .hud-container {
+    left: var(--app-padding-mobile-small); 
+    right: var(--app-padding-mobile-small);
+  }
+  .hud-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+  .hud-title {
+    margin-right: 0;
+    padding-right: 0;
+    border-right: none;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .hud-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .hud-item {
+    justify-content: space-between;
+  }
+}
+
+/* Keyframes */
 @keyframes pulse {
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(var(--pulse-scale, 1.1)); opacity: 0.7; }
@@ -915,204 +1037,4 @@ body {
   .manual-content {
     padding: 1.5rem;
   }
-
-  .hud-panel {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-    padding: 0.75rem;
-  }
-  .hud-title {
-    margin-right: 0;
-    padding-right: 0;
-    border-right: none;
-    text-align: center;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-color);
-  }
-  .hud-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-  }
-  .hud-item {
-    justify-content: space-between;
-  }
-}
-
-:root {
-  --background-color: #010413;
-  --primary-glow: #00ffff;
-  --secondary-glow: #ff00ff;
-  --text-color: #d0d0ff;
-  --text-muted: #8080a0;
-  --panel-bg: rgba(16, 19, 43, 0.5);
-  --border-color: rgba(0, 255, 255, 0.2);
-  --font-primary: 'Orbitron', sans-serif;
-  --font-secondary: 'Rajdhani', sans-serif;
-
-  /* Variables for HUD calculation */
-  --app-max-width: 1600px;
-  --app-padding-desktop: 1.5rem;
-  --col1-width-desktop: 250px;
-  --col3-width-desktop: 320px;
-  --grid-gap-desktop: 1.5rem;
-
-  --col1-width-tablet: 200px; /* for 1200px breakpoint */
-  --col3-width-tablet: 280px; /* for 1200px breakpoint */
-  --grid-gap-tablet: 1rem;    /* for 1200px breakpoint */
-  --app-padding-tablet: 1rem; /* for 1200px breakpoint */
-
-  --app-padding-mobile-large: 1rem; /* for 992px breakpoint */
-  --app-padding-mobile-small: 0.5rem; /* for 768px breakpoint */
-}
-
-/* (Keep existing * {} and body {} styles) */
-
-/* HUD Styles */
-.hud-container {
-  position: fixed;
-  top: 1rem;
-  z-index: 1000;
-
-  /* Default for < 1600px viewport (targets viewports between 1200px and 1599px before next media query) */
-  left: calc(var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop));
-  width: calc(100vw - (2 * var(--app-padding-desktop)) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop)));
-  right: auto; /* Ensure 'right' is not interfering */
-  transform: none; /* Ensure 'transform' is not interfering */
-}
-
-/* For viewport >= 1600px (app-container is centered 1600px box) */
-@media (min-width: 1600px) {
-  .hud-container {
-    left: calc(((100vw - var(--app-max-width)) / 2) + var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop));
-    width: calc(var(--app-max-width) - (2 * var(--app-padding-desktop)) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop)));
-  }
-}
-
-/* Responsive adjustments for HUD width and positioning for tablet and mobile */
-/* Max-width 1200px (actually applies from 993px to 1199px for these specific column/gap values) */
-@media (max-width: 1199.98px) { /* Using .98 to avoid collision if 1200px is exact switch for app-container */
-  .hud-container {
-    /* Uses values for screen width 100vw, with tablet column/gap sizes */
-    left: calc(var(--app-padding-tablet) + var(--col1-width-tablet) + var(--grid-gap-tablet));
-    width: calc(100vw - (2 * var(--app-padding-tablet)) - var(--col1-width-tablet) - var(--col3-width-tablet) - (2 * var(--grid-gap-tablet)));
-  }
-}
-
-/* Styles for when app becomes single column */
-@media (max-width: 992px) {
-  .hud-container {
-    width: auto; /* Full width */
-    left: var(--app-padding-mobile-large);  /* Match app-container padding */
-    right: var(--app-padding-mobile-large); /* Match app-container padding */
-  }
-}
-
-@media (max-width: 768px) {
-  .hud-container {
-    left: var(--app-padding-mobile-small); /* Match app-container padding */
-    right: var(--app-padding-mobile-small);/* Match app-container padding */
-  }
-  /* .hud-panel specific changes for small screens are already in existing CSS */
-}
-
-/* NEW HUD STYLES TO ALIGN WITH INTERACTION PANEL */
-.hud-container {
-  position: fixed;
-  top: 0.5rem; /* Adjusted to move HUD up slightly */
-  z-index: 1000;
-
-  /* Default for < 1600px viewport (specifically targets viewports between 1200px and 1599.98px due to media query order) */
-  left: calc(var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop) + ((100vw - (2 * var(--app-padding-desktop)) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.005));
-  width: calc((100vw - (2 * var(--app-padding-desktop)) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.99);
-  right: auto; 
-  transform: none; 
-}
-
-/* For viewport >= 1600px (app-container is centered 1600px box) */
-@media (min-width: 1600px) {
-  .hud-container {
-    left: calc(((100vw - var(--app-max-width)) / 2) + var(--app-padding-desktop) + var(--col1-width-desktop) + var(--grid-gap-desktop) + ((var(--app-max-width) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.005));
-    /* Width of the 1fr column when app-container is 1600px wide */
-    width: calc((var(--app-max-width) - var(--col1-width-desktop) - var(--col3-width-desktop) - (2 * var(--grid-gap-desktop))) * 0.99);
-  }
-}
-
-/* For viewports from 992.99px up to 1199.98px */
-/* Uses tablet-specific column widths, gaps, and padding */
-@media (max-width: 1199.98px) {
-  .hud-container {
-    left: calc(var(--app-padding-tablet) + var(--col1-width-tablet) + var(--grid-gap-tablet) + ((100vw - (2 * var(--app-padding-tablet)) - var(--col1-width-tablet) - var(--col3-width-tablet) - (2 * var(--grid-gap-tablet))) * 0.005));
-    width: calc((100vw - (2 * var(--app-padding-tablet)) - var(--col1-width-tablet) - var(--col3-width-tablet) - (2 * var(--grid-gap-tablet))) * 0.99);
-  }
-}
-
-/* For viewports <= 992px (when app becomes single column) */
-@media (max-width: 992px) {
-  .hud-container {
-    width: auto; /* Full width */
-    left: var(--app-padding-mobile-large); 
-    right: var(--app-padding-mobile-large);
-  }
-}
-
-@media (max-width: 768px) {
-  .hud-container {
-    left: var(--app-padding-mobile-small); 
-    right: var(--app-padding-mobile-small);
-  }
-}
-
-.hud-panel {
-  width: 100%; /* Make hud-panel take full width of hud-container */
-  background: var(--panel-bg);
-  border: 1px solid var(--border-color);
-  backdrop-filter: blur(10px);
-  border-radius: 6px; 
-  padding: 0.1rem 1rem; /* Drastically reduced vertical padding for 50% height target */
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.1), inset 0 0 8px rgba(0, 255, 255, 0.05); 
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.hud-title {
-  font-family: var(--font-primary);
-  font-size: 0.6rem; /* Significantly reduced for 50% height target */
-  text-transform: uppercase;
-  letter-spacing: 0.5px; /* Adjusted for smaller font */
-  color: var(--primary-glow);
-  text-shadow: 0 0 2px var(--primary-glow); /* Adjusted shadow */
-  margin-right: 0.4rem; /* Adjusted for smaller font */
-  padding-right: 0.4rem; /* Adjusted for smaller font */
-  border-right: 1px solid var(--border-color);
-}
-
-.hud-grid {
-  display: flex;
-  gap: 0.5rem; /* Significantly reduced gap */
-}
-
-.hud-item {
-  display: flex;
-  align-items: baseline;
-  gap: 0.2rem; /* Significantly reduced gap */
-}
-
-.hud-label {
-  font-family: var(--font-primary);
-  font-size: 0.5rem; /* Significantly reduced for 50% height target */
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-
-.hud-value {
-  font-family: var(--font-secondary);
-  font-size: 0.6rem; /* Significantly reduced for 50% height target */
-  font-weight: 700;
-  color: var(--primary-glow);
-  text-shadow: 0 0 1px var(--primary-glow); /* Adjusted shadow */
-  min-width: 20px; /* Adjusted min-width */
 }
